@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAST в iframe — Kinescope</title>
+<script src="../tracking-codes.js"></script>
+<link rel="stylesheet" href="../shared/media.css">
+<link rel="stylesheet" href="../shared/hud.css">
+</head>
+<body class="media">
+<div class="hud">
+  <h2>VAST — плеер в iframe</h2>
+  <div class="metric"><div class="label">XML</div><div class="value" id="fmtState">—</div></div>
+  <a href="../index.html">На главную</a>
+</div>
+<p class="devtools-warn">Не открывайте DevTools. Тот же VAST XML, плеер живёт во вложенном документе.</p>
+<header class="site-header">
+  <a class="brand" href="../index.html">Вести полигона</a>
+  <nav><a href="basic.html">Без iframe</a></nav>
+</header>
+<div class="layout">
+  <article class="article">
+    <p class="meta">Видео · iframe</p>
+    <h1>Площадка вставляет плеер во фрейм</h1>
+    <p class="lead">Внешняя страница — оболочка СМИ. Рекламный XML исполняется внутри iframe.</p>
+    <iframe class="video-frame" src="player-frame.html" title="Kinescope VAST" allow="autoplay; fullscreen"></iframe>
+    <p class="raw-label">Сырой VAST Tag URL</p>
+    <pre id="rawTag"></pre>
+    <p class="raw-label">Сырой VAST XML</p>
+    <pre id="rawXml"></pre>
+    <p class="raw-label">Событийные трекеры</p>
+    <pre id="rawTrackers"></pre>
+  </article>
+</div>
+<script>
+(function(){
+  VisiblaInject.showRaw('#rawTag', 'vast', 'tagUrl');
+  VisiblaInject.showRaw('#rawXml', 'vast', 'xml');
+  VisiblaInject.showRaw('#rawTrackers', 'vast', 'trackers');
+  var xml = VisiblaInject.vastXml('vast');
+  var state = document.getElementById('fmtState');
+  state.textContent = xml ? 'READY' : 'PENDING';
+  state.className = 'value ' + (xml ? 'green' : 'red');
+})();
+</script>
+</body>
+</html>

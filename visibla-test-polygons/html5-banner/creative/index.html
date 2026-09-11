@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="ad.size" content="width=300,height=250">
+<title>Visibla HTML5 300x250</title>
+<link rel="stylesheet" href="folder/style.css">
+</head>
+<body>
+<a id="clickArea" href="#" rel="noopener" target="_blank">
+  <span class="label">Visibla 300×250</span>
+  <img src="folder/image.png" alt="Баннер 300x250" width="300" height="250">
+  <img class="failover" src="failover.jpg" alt="" width="300" height="250">
+</a>
+<script>
+(function () {
+  function param(name) {
+    var q = window.location.search || '';
+    var re = new RegExp('[?&]' + name + '=([^&]*)');
+    var m = q.match(re);
+    if (!m) return '';
+    try { return decodeURIComponent(m[1].replace(/\+/g, ' ')); } catch (e) { return m[1]; }
+  }
+  var click = param('clickTag') || param('clickTAG') || '#';
+  var a = document.getElementById('clickArea');
+  a.href = click;
+  a.addEventListener('click', function (e) {
+    if (!click || click === '#') e.preventDefault();
+  });
+})();
+</script>
+</body>
+</html>

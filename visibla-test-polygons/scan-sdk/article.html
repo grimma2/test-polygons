@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<!-- SCAN_SDK -->
+<script>
+  (function(w, n, d) {
+    w[d] = w[d] || [];
+    w[n] = w[n] || function() {
+      Array.prototype.push.call(w[d], arguments);
+      if (w[d].length > 50) w[d].shift();
+    };
+  })(window, 'visibla', 'visiblaData');
+  visibla('init', '12413');
+</script>
+<script async src="https://storage.yandexcloud.net/visibla-scan/visibla.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scan SDK — статья MPA</title>
+<link rel="stylesheet" href="../shared/media.css">
+<link rel="stylesheet" href="../shared/hud.css">
+</head>
+<body class="media">
+<div class="hud">
+  <h2>Scan SDK — MPA</h2>
+  <a href="../index.html">На главную</a>
+</div>
+<p class="devtools-warn">Не открывайте DevTools. Смотрите payload на бэке Scan. Холодный заход и повтор — warm session в localStorage.</p>
+<header class="site-header">
+  <a class="brand" href="../index.html">Вести полигона</a>
+  <nav>
+    <a href="spa.html">SPA</a>
+    <a href="activity.html">Активность</a>
+  </nav>
+</header>
+<div class="site-sub">referrer и параметры кампании передаются как на СМИ</div>
+<div class="layout">
+  <article class="article">
+    <p class="meta">Scan · MPA · project 12413</p>
+    <h1>Статья с обычной перезагрузкой страницы</h1>
+    <p class="lead">Первый визит — холодная сессия. Повторное открытие той же вкладки в пределах 30 минут — тёплая сессия. Браузер и бот по-разному дают init, page_view и attribution.</p>
+    <p>Ниже ссылки с метками, которые Scan кладёт в attribution: UTM, yclid, click_id.</p>
+    <p>
+      <a href="article.html?utm_source=yandex&amp;utm_medium=cpc&amp;utm_campaign=polygon&amp;utm_content=inread">Заход с UTM</a>
+      ·
+      <a href="article.html?yclid=24000000000000000">Заход с yclid</a>
+      ·
+      <a href="article.html?click_id=clk_polygon_1">Заход с click_id</a>
+    </p>
+    <p>Документ отдаётся целиком (MPA): каждый клик по ссылке — новая загрузка HTML. Referrer браузера должен совпасть с предыдущим URL.</p>
+    <p>Сниппет стоит один раз в head, очередь создаётся до бандла. Повторный <code>init</code> на этой странице не вызывается.</p>
+    <p>После прогона откройте ту же ссылку ещё раз без DevTools: на бэке должна быть тёплая сессия, а не второй полный fingerprint.</p>
+    <p>Боты без JS или с урезанным окружением не дадут тот же набор полей, что живой браузер.</p>
+  </article>
+  <aside class="sidebar">
+    <div class="widget">
+      <h3>Стенд</h3>
+      <p><a href="spa.html">История без reload</a></p>
+      <p><a href="activity.html">Скролл и track</a></p>
+    </div>
+  </aside>
+</div>
+<footer class="site-footer">Scan SDK · visibla.min.js · init 12413</footer>
+</body>
+</html>

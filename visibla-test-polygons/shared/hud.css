@@ -1,0 +1,21 @@
+.hud{
+  position:sticky;top:0;z-index:2000;
+  background:#161b22;color:#c9d1d9;
+  border-bottom:1px solid #30363d;
+  padding:10px 16px;
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+.hud h2{color:#58a6ff;margin-right:auto;font-size:.92rem;font-weight:600}
+.hud .metric{background:#21262d;border:1px solid #30363d;border-radius:8px;padding:6px 12px;min-width:84px}
+.hud .metric .label{font-size:.6rem;color:#8b949e;text-transform:uppercase;letter-spacing:.4px}
+.hud .metric .value{font-size:1.05rem;font-weight:700;color:#58a6ff}
+.hud .metric .value.green{color:#3fb950}
+.hud .metric .value.red{color:#f85149}
+.hud .metric .value.yellow{color:#d2991d}
+.hud a{color:#79c0ff;font-size:.8rem}
+.hud .tracker-row{display:flex;gap:8px;align-items:center;background:#21262d;border-radius:8px;padding:6px 12px;border:1px solid #30363d}
+.hud .tracker-row .t-label{font-size:.7rem;color:#8b949e}
+.hud .tracker-row .t-val{font-size:.85rem;font-weight:700;color:#58a6ff}
+.hud .tracker-row .t-val.green{color:#3fb950}
+.hud .tracker-row .t-val.red{color:#f85149}

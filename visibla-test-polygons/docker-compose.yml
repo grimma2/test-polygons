@@ -1,0 +1,10 @@
+services:
+  polygon:
+    image: nginx:1.27-alpine
+    container_name: visibla-polygon
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/usr/share/nginx/html:ro
+      - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf:ro

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="250">
+  <rect width="300" height="250" fill="#8b1e1e"/>
+  <text x="150" y="120" fill="#fff" text-anchor="middle" font-family="sans-serif" font-size="18">Visibla</text>
+  <text x="150" y="148" fill="#f4d4d4" text-anchor="middle" font-family="sans-serif" font-size="13">300×250</text>
+</svg>

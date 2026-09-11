@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Не источник истины. VPAID XML берётся из tracking-codes.js (слот vpaid.xml / vpaid.tagUrl).
+  Страницы preroll.html и mute-toggle.html этот файл не загружают.
+-->
+<VAST version="3.0">
+  <Ad id="unused">
+    <InLine>
+      <AdSystem>Visibla</AdSystem>
+      <AdTitle>Unused local stub</AdTitle>
+      <Creatives></Creatives>
+    </InLine>
+  </Ad>
+</VAST>

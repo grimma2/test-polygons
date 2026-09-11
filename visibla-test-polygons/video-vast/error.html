@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAST error — Kinescope</title>
+<script src="../tracking-codes.js"></script>
+<link rel="stylesheet" href="../shared/media.css">
+<link rel="stylesheet" href="../shared/hud.css">
+</head>
+<body class="media">
+<div class="hud">
+  <h2>VAST — битый MediaFile</h2>
+  <div class="metric"><div class="label">XML</div><div class="value" id="fmtState">—</div></div>
+  <a href="../index.html">На главную</a>
+</div>
+<p class="devtools-warn">Слот vast.xml в tracking-codes.js не меняется. Ожидание в ЛК: event=error.</p>
+<header class="site-header">
+  <a class="brand" href="../index.html">Вести полигона</a>
+  <nav><a href="basic.html">Рабочий преролл</a></nav>
+</header>
+<div class="layout">
+  <article class="article">
+    <p class="meta">Видео · ошибка загрузки ролика</p>
+    <h1>Несуществующий mp4 в копии XML</h1>
+    <p class="lead">Плеер получает тот же VAST, но URL MediaFile подменён локально на отсутствующий файл в Object Storage. Макрос [ERRORCODE] не запекается заранее — его подставит плеер.</p>
+    <div id="ad-slot" class="video-frame"><div id="player"></div></div>
+    <p class="raw-label">Сырой VAST XML (слот кабинета)</p>
+    <pre id="rawXml"></pre>
+    <p class="raw-label">Сырой Tag URL</p>
+    <pre id="rawTag"></pre>
+  </article>
+</div>
+<script src="../shared/kinescope.js"></script>
+<script>
+(function(){
+  VisiblaInject.showRaw('#rawXml', 'vast', 'xml');
+  VisiblaInject.showRaw('#rawTag', 'vast', 'tagUrl');
+  var xml = VisiblaInject.vastXml('vast');
+  var state = document.getElementById('fmtState');
+  state.textContent = xml ? 'READY' : 'PENDING';
+  state.className = 'value ' + (xml ? 'green' : 'red');
+  if (!xml) {
+    VisiblaInject.showPending('#ad-slot', 'vast', 'xml');
+    return;
+  }
+  VisiblaKinescope.create('player', { xml: VisiblaKinescope.brokenXml(xml) });
+})();
+</script>
+</body>
+</html>

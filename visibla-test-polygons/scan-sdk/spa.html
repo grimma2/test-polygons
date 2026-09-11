@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<!-- SCAN_SDK -->
+<script>
+  (function(w, n, d) {
+    w[d] = w[d] || [];
+    w[n] = w[n] || function() {
+      Array.prototype.push.call(w[d], arguments);
+      if (w[d].length > 50) w[d].shift();
+    };
+  })(window, 'visibla', 'visiblaData');
+  visibla('init', '12413');
+</script>
+<script async src="https://storage.yandexcloud.net/visibla-scan/visibla.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scan SDK — SPA</title>
+<link rel="stylesheet" href="../shared/media.css">
+<link rel="stylesheet" href="../shared/hud.css">
+</head>
+<body class="media">
+<div class="hud">
+  <h2>Scan SDK — SPA</h2>
+  <div class="metric"><div class="label">Path</div><div class="value" id="pathLabel">—</div></div>
+  <a href="../index.html">На главную</a>
+</div>
+<p class="devtools-warn">Не открывайте DevTools. SpaObserver патчит History только после fingerprint — жмите маршруты после загрузки.</p>
+<header class="site-header">
+  <a class="brand" href="../index.html">Вести полигона</a>
+  <nav>
+    <a href="article.html">MPA</a>
+    <a href="activity.html">Активность</a>
+  </nav>
+</header>
+<div class="layout">
+  <article class="article">
+    <p class="meta">Scan · History API · project 12413</p>
+    <h1>Смена URL без перезагрузки</h1>
+    <p class="lead" id="lead">Одностраничник: path меняется через pushState, replaceState и кнопку «назад» (popstate). На бэке сверяйте разные page_view.</p>
+    <div class="actions">
+      <button type="button" id="btnLenta">Маршрут /lenta</button>
+      <button type="button" id="btnSport">Маршрут /sport</button>
+      <button type="button" class="secondary" id="btnReplace">replaceState /home</button>
+      <button type="button" class="secondary" id="btnBack">Назад (popstate)</button>
+    </div>
+    <p class="hint" id="view">Подождите загрузку SDK, затем меняйте маршрут. SpaObserver патчит History после fingerprint.</p>
+    <p>Не вызывайте History API до готовности SDK: патч идёт после FP, иначе антитампер ломает native code у pushState.</p>
+    <p>Документ не перезагружается. Сниппет и init 12413 — один раз в head.</p>
+  </article>
+</div>
+<script>
+(function(){
+  var titles = {
+    lenta: 'Лента новостей',
+    sport: 'Спорт',
+    home: 'Главная SPA'
+  };
+  function show() {
+    var path = location.pathname + location.search + location.hash;
+    document.getElementById('pathLabel').textContent = location.pathname.split('/').pop() || '/';
+    document.getElementById('view').textContent = 'URL: ' + path;
+    var key = 'home';
+    if (/lenta\/?$/.test(location.pathname)) key = 'lenta';
+    else if (/sport\/?$/.test(location.pathname)) key = 'sport';
+    document.getElementById('lead').textContent = titles[key] + '. Смена path без reload — page_view на бэке Scan.';
+  }
+  function go(name, replace) {
+    var next = name === 'home' ? 'spa.html' : name;
+    if (replace) history.replaceState({ route: name }, '', next);
+    else history.pushState({ route: name }, '', next);
+    show();
+  }
+  document.getElementById('btnLenta').disabled = true;
+  document.getElementById('btnSport').disabled = true;
+  document.getElementById('btnReplace').disabled = true;
+  document.getElementById('btnBack').disabled = true;
+  window.addEventListener('popstate', show);
+  document.getElementById('btnLenta').addEventListener('click', function(){ go('lenta', false); });
+  document.getElementById('btnSport').addEventListener('click', function(){ go('sport', false); });
+  document.getElementById('btnReplace').addEventListener('click', function(){ go('home', true); });
+  document.getElementById('btnBack').addEventListener('click', function(){ history.back(); });
+  window.addEventListener('load', function(){
+    setTimeout(function(){
+      document.getElementById('btnLenta').disabled = false;
+      document.getElementById('btnSport').disabled = false;
+      document.getElementById('btnReplace').disabled = false;
+      document.getElementById('btnBack').disabled = false;
+      show();
+    }, 4000);
+  });
+  show();
+})();
+</script>
+</body>
+</html>

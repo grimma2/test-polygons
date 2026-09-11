@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Размеры — Image Display</title>
+<script src="../tracking-codes.js"></script>
+<link rel="stylesheet" href="../shared/media.css">
+<link rel="stylesheet" href="../shared/hud.css">
+</head>
+<body class="media">
+<div class="hud">
+  <h2>Сетка размеров</h2>
+  <div class="metric"><div class="label">Размер</div><div class="value" id="sizeLabel">300×250</div></div>
+  <div class="metric"><div class="label">Vis %</div><div class="value red" id="visPct">0%</div></div>
+  <a href="../index.html">На главную</a>
+</div>
+<p class="devtools-warn">Каждый размер — свой Smart Tag и creative-id из ЛК. Не открывайте DevTools на прогоне.</p>
+<header class="site-header"><a class="brand" href="../index.html">Вести полигона</a></header>
+<div class="layout">
+  <article class="article">
+    <h1>Размеры Директ / Adfox</h1>
+    <div class="actions" id="sizes">
+      <button type="button" data-w="240" data-h="400" data-tab="smartTag_240x400">240×400</button>
+      <button type="button" data-w="300" data-h="250" data-tab="smartTag">300×250</button>
+      <button type="button" data-w="300" data-h="300" data-tab="smartTag_300x300">300×300</button>
+      <button type="button" data-w="300" data-h="600" data-tab="smartTag_300x600">300×600</button>
+      <button type="button" data-w="728" data-h="90" data-tab="smartTag_728x90">728×90</button>
+      <button type="button" data-w="970" data-h="250" data-tab="smartTag_970x250">970×250</button>
+    </div>
+    <div class="in-read"><div id="ad-slot" class="slot-box slot-300"></div></div>
+    <p class="raw-label" id="rawLabel">image_display.smartTag</p>
+    <pre id="rawSnippet"></pre>
+  </article>
+</div>
+<script src="../shared/hud.js"></script>
+<script>
+(function(){
+  var slot = document.getElementById('ad-slot');
+  function apply(w, h, tab){
+    VisiblaInject.showRaw('#rawSnippet', 'image_display', tab);
+    VisiblaInject.mountFormat('#ad-slot', 'image_display', tab);
+    slot.style.width = w + 'px';
+    slot.style.height = h + 'px';
+    slot.style.maxWidth = '100%';
+    var box = slot.querySelector('.visibla-container') || slot;
+    box.style.width = w + 'px';
+    box.style.height = h + 'px';
+    box.style.maxWidth = '100%';
+    document.getElementById('sizeLabel').textContent = w + '×' + h;
+    document.getElementById('rawLabel').textContent = 'image_display.' + tab;
+  }
+  document.getElementById('sizes').addEventListener('click', function(e){
+    var b = e.target.closest('button');
+    if (!b) return;
+    apply(
+      Number(b.getAttribute('data-w')),
+      Number(b.getAttribute('data-h')),
+      b.getAttribute('data-tab')
+    );
+  });
+  apply(300, 250, 'smartTag');
+  VisiblaHud.watch('#ad-slot');
+})();
+</script>
+</body>
+</html>

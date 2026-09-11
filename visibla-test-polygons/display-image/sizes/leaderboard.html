@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leaderboard 728×90 — Visibla Test</title>
+<script src="../../tracking-codes.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0d1117;color:#c9d1d9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+.panel{position:sticky;top:0;z-index:1000;background:#161b22;border-bottom:2px solid #30363d;padding:14px 24px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.panel h2{color:#58a6ff;margin-right:auto;font-size:.95rem}
+.panel .metric{background:#21262d;border:1px solid #30363d;border-radius:8px;padding:7px 12px;min-width:90px}
+.panel .metric .label{font-size:.65rem;color:#8b949e;text-transform:uppercase}
+.panel .metric .value{font-size:1.2rem;font-weight:700;color:#58a6ff}
+.panel .metric .value.green{color:#3fb950}
+.panel .metric .value.red{color:#f85149}
+.spacer{height:1000px;display:flex;align-items:center;justify-content:center;color:#30363d;font-size:.85rem}
+.banner-zone{display:flex;justify-content:center;padding:30px 0}
+.visibla-container{position:relative;width:728px;height:90px;overflow:hidden;background:#fff;border:3px solid #f85149;border-radius:4px;transition:border-color .3s;max-width:100%}
+.visibla-container.viewable{border-color:#3fb950}
+.visibla-container img{width:100%;height:100%;object-fit:cover}
+.indicator{position:absolute;top:4px;right:4px;width:10px;height:10px;border-radius:50%;background:#f85149;transition:background .3s;z-index:10}
+.visibla-container.viewable .indicator{background:#3fb950}
+.size-tag{position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,.6);color:#fff;font-size:.6rem;padding:1px 5px;border-radius:3px;z-index:10}
+.raw-label{text-align:center;color:#8b949e;font-size:.75rem;margin:8px 0 6px}
+</style>
+</head>
+<body>
+<div class="panel" id="panel">
+  <h2>📏 Leaderboard 728×90</h2>
+  <div class="metric"><div class="label">Visibility %</div><div class="value red" id="visPct">0%</div></div>
+  <div class="metric"><div class="label">MRC Viewable</div><div class="value red" id="mrc">NO</div></div>
+  <div class="metric"><div class="label">Pulses</div><div class="value" id="pulses">0</div></div>
+</div>
+<div class="spacer">▲ Scroll down ▼</div>
+<div class="banner-zone">
+  <div id="ad-slot"></div>
+</div>
+<p class="raw-label">Сырой сниппет image_display.smartTag</p>
+<pre id="rawSnippet"></pre>
+<div class="spacer">▲ Banner above ▲</div>
+<script>
+(function(){
+  VisiblaInject.showRaw('#rawSnippet', 'image_display', 'smartTag');
+  VisiblaInject.mountFormat('#ad-slot', 'image_display', 'smartTag');
+
+  var visPct=document.getElementById('visPct');
+  var mrc=document.getElementById('mrc'),pulses=document.getElementById('pulses'),pCount=0;
+  function banner(){ return document.querySelector('#ad-slot .visibla-container') || document.getElementById('ad-slot'); }
+  function update(){
+    var el=banner(); if(!el) return;
+    var rect=el.getBoundingClientRect(),vw=window.innerWidth,vh=window.innerHeight;
+    var visW=Math.max(0,Math.min(rect.right,vw)-Math.max(rect.left,0));
+    var visH=Math.max(0,Math.min(rect.bottom,vh)-Math.max(rect.top,0));
+    var pct=rect.width*rect.height>0?Math.round((visW*visH/(rect.width*rect.height))*100):0;
+    visPct.textContent=pct+'%';visPct.className='value '+(pct>=50?'green':'red');
+    var ok=pct>=50;mrc.textContent=ok?'YES':'NO';mrc.className='value '+(ok?'green':'red');
+    el.classList.toggle('viewable',ok);if(ok)pCount++;pulses.textContent=pCount;
+  }
+  window.addEventListener('scroll',update,{passive:true});
+  window.addEventListener('resize',update,{passive:true});
+  update();
+})();
+</script>
+</body>
+</html>

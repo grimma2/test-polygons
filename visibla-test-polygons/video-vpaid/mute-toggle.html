@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VPAID mute — Kinescope</title>
+<script src="../tracking-codes.js"></script>
+<link rel="stylesheet" href="../shared/media.css">
+<link rel="stylesheet" href="../shared/hud.css">
+</head>
+<body class="media">
+<div class="hud">
+  <h2>VPAID — mute плеера</h2>
+  <div class="metric"><div class="label">XML</div><div class="value" id="fmtState">—</div></div>
+  <div class="metric"><div class="label">Звук</div><div class="value red" id="audible">MUTED</div></div>
+  <a href="../index.html">На главную</a>
+</div>
+<p class="devtools-warn">Не открывайте DevTools. Старт muted. Кнопки меняют mute у Kinescope, не у XML.</p>
+<header class="site-header">
+  <a class="brand" href="../index.html">Вести полигона</a>
+  <nav><a href="preroll.html">Преролл</a></nav>
+</header>
+<div class="layout">
+  <article class="article">
+    <p class="meta">Видео · audibility</p>
+    <h1>Тот же VPAID XML, mute у плеера</h1>
+    <p class="lead">Сначала без звука (автозапуск). Затем unmute / mute через API Kinescope.</p>
+    <div class="actions">
+      <button type="button" id="btnUnmute">Unmute</button>
+      <button type="button" class="secondary" id="btnMute">Mute</button>
+    </div>
+    <div id="ad-slot" class="video-frame"><div id="player"></div></div>
+    <p class="raw-label">Сырой VPAID Tag URL</p>
+    <pre id="rawTag"></pre>
+    <p class="raw-label">Сырой VPAID XML</p>
+    <pre id="rawXml"></pre>
+  </article>
+</div>
+<script src="../shared/kinescope.js"></script>
+<script>
+(function(){
+  var playerRef = null;
+  var audible = document.getElementById('audible');
+  function mark(muted) {
+    audible.textContent = muted ? 'MUTED' : 'AUDIBLE';
+    audible.className = 'value ' + (muted ? 'red' : 'green');
+  }
+  VisiblaInject.showRaw('#rawTag', 'vpaid', 'tagUrl');
+  VisiblaInject.showRaw('#rawXml', 'vpaid', 'xml');
+  var xml = VisiblaInject.vastXml('vpaid');
+  var state = document.getElementById('fmtState');
+  state.textContent = xml ? 'READY' : 'PENDING';
+  state.className = 'value ' + (xml ? 'green' : 'red');
+  document.getElementById('btnMute').addEventListener('click', function(){
+    VisiblaKinescope.setMuted(playerRef, true);
+    mark(true);
+  });
+  document.getElementById('btnUnmute').addEventListener('click', function(){
+    VisiblaKinescope.setMuted(playerRef, false);
+    mark(false);
+  });
+  if (!xml) {
+    VisiblaInject.showPending('#ad-slot', 'vpaid', 'xml');
+    return;
+  }
+  VisiblaKinescope.create('player', {
+    xml: xml,
+    onReady: function(player){
+      playerRef = player;
+      mark(VisiblaKinescope.isMuted(player));
+      if (player.Events && typeof player.on === 'function') {
+        if (player.Events.Mute) {
+          player.on(player.Events.Mute, function(){ mark(true); });
+        }
+        if (player.Events.UnMute) {
+          player.on(player.Events.UnMute, function(){ mark(false); });
+        }
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>

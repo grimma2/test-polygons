@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rapid Reload — Visibla BadRefresh Test</title>
+<script src="../tracking-codes.js"></script>
+<link rel="stylesheet" href="../shared/hud.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0d1117;color:#c9d1d9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+.panel{position:sticky;top:0;z-index:1000;background:#161b22;border-bottom:2px solid #30363d;padding:14px 24px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.panel h2{color:#58a6ff;margin-right:auto;font-size:.95rem}
+.panel .metric{background:#21262d;border:1px solid #30363d;border-radius:8px;padding:7px 12px;min-width:85px}
+.panel .metric .label{font-size:.6rem;color:#8b949e;text-transform:uppercase}
+.panel .metric .value{font-size:1.1rem;font-weight:700;color:#58a6ff}
+.panel .metric .value.green{color:#3fb950}
+.panel .metric .value.red{color:#f85149}
+.panel .metric .value.yellow{color:#d2991d}
+.banner-zone{display:flex;justify-content:center;padding:20px 0}
+.visibla-container{position:relative;width:300px;height:250px;overflow:hidden;background:#fff;border:3px solid #f85149;border-radius:4px}
+.visibla-container img{width:100%;height:100%;object-fit:cover}
+.countdown{text-align:center;padding:16px;font-size:1.5rem;color:#d2991d}
+.countdown .big{font-size:3rem;font-weight:700;display:block}
+.info-text{text-align:center;max-width:600px;margin:0 auto;padding:16px;color:#8b949e;font-size:.8rem;line-height:1.5}
+.reload-log{max-width:500px;margin:0 auto;padding:12px;background:#161b22;border:1px solid #30363d;border-radius:8px;font-size:.75rem;font-family:monospace;color:#3fb950;max-height:80px;overflow-y:auto}
+.raw-label{text-align:center;color:#8b949e;font-size:.75rem;margin:8px 0 6px}
+</style>
+</head>
+<body>
+<div class="hud">
+  <h2>Rapid Reload — BadRefresh</h2>
+  <a href="../index.html">На главную</a>
+  <div class="metric"><div class="label">Reload #</div><div class="value yellow" id="reloadNum">1</div></div>
+  <div class="metric"><div class="label">Interval</div><div class="value" id="interval">3s</div></div>
+  <div class="metric"><div class="label">Session</div><div class="value" id="sessionId" style="font-size:.7rem">—</div></div>
+</div>
+<div class="countdown">Next reload in: <span class="big" id="countdown">3</span>s</div>
+<div class="banner-zone">
+  <div id="ad-slot"></div>
+</div>
+<p class="raw-label">Сырой сниппет image_display.smartTag</p>
+<pre id="rawSnippet"></pre>
+<div class="reload-log" id="reloadLog">Starting rapid reload cycle...</div>
+<div class="info-text">
+  ⚠️ <strong>Warning:</strong> This page auto-reloads every 3 seconds. It tests the BadRefresh detection mechanism — the SDK should detect that the same banner is being rapidly reinserted/reloaded and flag it as a potential refresh fraud pattern.
+</div>
+<script>
+(function(){
+  VisiblaInject.showRaw('#rawSnippet', 'image_display', 'smartTag');
+  VisiblaInject.mountFormat('#ad-slot', 'image_display', 'smartTag');
+
+  var reloadNum=parseInt(localStorage.getItem('visibla_reload_num')||'1');
+  var sessionId=localStorage.getItem('visibla_reload_session')||('rsess_'+Date.now().toString(36));
+  localStorage.setItem('visibla_reload_session',sessionId);
+  localStorage.setItem('visibla_reload_num',reloadNum+1);
+
+  document.getElementById('reloadNum').textContent=reloadNum;
+  document.getElementById('sessionId').textContent=sessionId;
+
+  var logEl=document.getElementById('reloadLog');
+  function log(msg){logEl.innerHTML+=msg+'<br>';logEl.scrollTop=logEl.scrollHeight;}
+
+  log('Reload #'+reloadNum+' — Session: '+sessionId);
+  log('Page loaded at: '+new Date().toISOString());
+
+  var remaining=3,cdEl=document.getElementById('countdown');
+  var timer=setInterval(function(){
+    remaining--;cdEl.textContent=remaining;
+    if(remaining<=0){clearInterval(timer);log('Reloading now...');location.reload();}
+  },1000);
+
+  if(reloadNum>=10){
+    clearInterval(timer);cdEl.textContent='STOPPED';
+    localStorage.removeItem('visibla_reload_num');
+    log('Auto-reload stopped after 10 cycles. Clear localStorage to restart.');
+  }
+})();
+</script>
+</body>
+</html>

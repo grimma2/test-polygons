@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML5 iframe — Visibla</title>
+<script src="../tracking-codes.js"></script>
+<link rel="stylesheet" href="../shared/media.css">
+<link rel="stylesheet" href="../shared/hud.css">
+</head>
+<body class="media">
+<div class="hud">
+  <h2>HTML5 iframe 300×250</h2>
+  <div class="metric"><div class="label">Слот</div><div class="value" id="slotState">—</div></div>
+  <a href="../index.html">На главную</a>
+</div>
+<p class="devtools-warn">Не открывайте DevTools. Смотрите отчёт в ЛК.</p>
+<header class="site-header">
+  <a class="brand" href="../index.html">Вести полигона</a>
+  <nav><a href="../index.html">Главная</a><a href="../POLYGON_INSTRUCTIONS.md">Инструкция</a></nav>
+</header>
+<div class="slot-header"><div class="ad-label">Реклама</div></div>
+<div class="layout">
+  <article class="article">
+    <p class="meta">Тест HTML5 · 300×250</p>
+    <h1>Креатив в фиксированном iframe</h1>
+    <p class="lead">Слот ровно 300×250. Код из <code>html5_display.iframe</code>. ZIP-эталон — html5-banner/creative/.</p>
+    <div class="in-read">
+      <div class="slot-box slot-300" id="ad-slot"></div>
+    </div>
+    <p class="raw-label">Сырой сниппет html5_display.iframe</p>
+    <pre id="rawSnippet"></pre>
+  </article>
+  <aside class="sidebar"><div class="widget"><h3>Справка</h3><p class="hint">Сначала загрузите ZIP в ЛК, затем вставьте выданный код.</p></div></aside>
+</div>
+<script src="../shared/hud.js"></script>
+<script>
+(function(){
+  VisiblaInject.showRaw('#rawSnippet', 'html5_display', 'iframe');
+  var ready = VisiblaInject.mountFormat('#ad-slot', 'html5_display', 'iframe');
+  var state = document.getElementById('slotState');
+  state.textContent = ready ? 'READY' : 'PENDING';
+  state.className = 'value ' + (ready ? 'green' : 'red');
+  VisiblaHud.watch('#ad-slot', { inner: '.visibla-container, iframe' });
+})();
+</script>
+</body>
+</html>

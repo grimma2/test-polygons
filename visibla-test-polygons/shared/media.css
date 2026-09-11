@@ -1,0 +1,88 @@
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body.media{
+  background:#f4f1ea;
+  color:#1a1a1a;
+  font-family:Georgia,'Times New Roman',serif;
+  line-height:1.6;
+  min-height:100vh;
+}
+.site-header{
+  background:#8b1e1e;
+  color:#fff;
+  padding:12px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.site-header a{color:#fff;text-decoration:none}
+.site-header .brand{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.95rem}
+.site-header nav{display:flex;gap:14px;flex-wrap:wrap;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:.8rem}
+.site-header nav a{opacity:.9}
+.site-header nav a:hover{text-decoration:underline}
+.site-sub{background:#2b2b2b;color:#ddd;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:.75rem;padding:6px 20px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:28px;max-width:1100px;margin:0 auto;padding:24px 20px 48px}
+@media (max-width:860px){.layout{grid-template-columns:1fr}}
+.slot-header{display:flex;justify-content:center;background:#ece8df;padding:10px 0;border-bottom:1px solid #ddd}
+.article h1{font-size:1.85rem;line-height:1.25;margin:0 0 12px}
+.article .lead{font-size:1.1rem;color:#333;margin-bottom:16px}
+.article p{margin-bottom:14px}
+.article .meta{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:.75rem;color:#666;margin-bottom:16px}
+.in-read{display:flex;justify-content:center;margin:22px 0}
+.sidebar{display:flex;flex-direction:column;gap:16px}
+.sidebar .widget{background:#fff;border:1px solid #ddd;padding:12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:.8rem}
+.sidebar .widget h3{font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;color:#8b1e1e}
+.ad-label{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:.65rem;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.site-footer{background:#2b2b2b;color:#aaa;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:.75rem;padding:20px;text-align:center}
+.site-footer a{color:#ddd}
+.raw-label{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:.75rem;color:#666;margin:12px 0 6px}
+.devtools-warn{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  font-size:.8rem;
+  background:#fff3cd;
+  color:#5c4800;
+  padding:8px 16px;
+  border-bottom:1px solid #e6d089;
+}
+.slot-box{position:relative;overflow:hidden;background:#fff;border:1px solid #ccc}
+.slot-728{width:728px;height:90px;max-width:100%}
+.slot-240{width:240px;height:400px}
+.slot-300{width:300px;height:250px}
+.slot-300sq{width:300px;height:300px}
+.slot-600{width:300px;height:600px}
+.slot-970{width:970px;height:250px;max-width:100%}
+.visibla-container.viewable{outline:2px solid #2f7d32}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.actions button,.actions a.btn{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  padding:8px 14px;
+  background:#8b1e1e;
+  color:#fff;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+  text-decoration:none;
+  font-size:.85rem;
+}
+.actions button.secondary,.actions a.secondary{background:#fff;color:#1a1a1a;border:1px solid #ccc}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.tabs button{padding:8px 14px;border:1px solid #ccc;background:#fff;cursor:pointer;border-radius:4px}
+.tabs button.active{background:#8b1e1e;color:#fff;border-color:#8b1e1e}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+.hint{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:.85rem;color:#555;margin-bottom:12px}
+.card-box{background:#fff;border:1px solid #ddd;border-radius:8px;padding:18px;margin-bottom:16px}
+.video-frame{width:100%;max-width:720px;margin:0 auto;background:#000;aspect-ratio:16/9}
+.video-frame iframe,.video-frame #player,.video-frame video{width:100%;height:100%;border:0;display:block}
+.request-log,.event-log{
+  font-family:ui-monospace,Menlo,monospace;
+  font-size:.75rem;
+  background:#1a1a1a;
+  color:#9fdf9f;
+  padding:12px;
+  border-radius:6px;
+  max-height:180px;
+  overflow:auto;
+}

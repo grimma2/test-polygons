@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Overlap / Occlusion — Visibla Edge Case</title>
+<script src="../tracking-codes.js"></script>
+<link rel="stylesheet" href="../shared/hud.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0d1117;color:#c9d1d9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh}
+.panel{position:sticky;top:0;z-index:2000;background:#161b22;border-bottom:2px solid #30363d;padding:14px 24px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.panel h2{color:#58a6ff;margin-right:auto;font-size:.95rem}
+.panel .metric{background:#21262d;border:1px solid #30363d;border-radius:8px;padding:7px 12px;min-width:85px}
+.panel .metric .label{font-size:.6rem;color:#8b949e;text-transform:uppercase}
+.panel .metric .value{font-size:1.1rem;font-weight:700;color:#58a6ff}
+.panel .metric .value.green{color:#3fb950}
+.panel .metric .value.red{color:#f85149}
+.panel .metric .value.yellow{color:#d2991d}
+.controls{display:flex;gap:10px;padding:16px;justify-content:center}
+.controls button{padding:10px 18px;border:1px solid #30363d;border-radius:8px;background:#21262d;color:#c9d1d9;cursor:pointer;font-size:.85rem}
+.controls button:hover{background:#30363d;border-color:#58a6ff}
+.controls button.active{background:#1b3a2a;border-color:#3fb950;color:#3fb950}
+.controls button.overlap-btn{background:#d2991d;border-color:#d2991d;color:#0d1117}
+.banner-zone{display:flex;justify-content:center;padding:30px 0;position:relative}
+.visibla-container{position:relative;width:300px;height:250px;overflow:hidden;background:#fff;border:3px solid #f85149;border-radius:4px;transition:border-color .3s;z-index:1}
+.visibla-container.viewable{border-color:#3fb950}
+.visibla-container img{width:100%;height:100%;object-fit:cover}
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.75);z-index:1000;display:none;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal-box{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:30px;text-align:center;max-width:400px;width:90%}
+.modal-box h3{color:#d2991d;margin-bottom:10px}
+.modal-box p{color:#8b949e;font-size:.85rem;margin-bottom:16px}
+.modal-box button{padding:8px 20px;background:#d2991d;color:#0d1117;border:none;border-radius:6px;cursor:pointer;font-weight:600}
+.partial-overlap{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:200px;height:180px;background:rgba(210,153,29,.9);z-index:1000;display:none;align-items:center;justify-content:center;border-radius:8px;font-weight:700;color:#0d1117;text-align:center}
+.partial-overlap.show{display:flex}
+.raw-label{text-align:center;color:#8b949e;font-size:.75rem;margin:8px 0 6px}
+</style>
+</head>
+<body>
+<div class="hud">
+  <h2>Overlap / Occlusion</h2>
+  <a href="../index.html">На главную</a>
+  <div class="metric"><div class="label">Banner Vis %</div><div class="value green" id="visPct">100%</div></div>
+  <div class="metric"><div class="label">MRC</div><div class="value green" id="mrc">YES</div></div>
+  <div class="metric"><div class="label">Occluded</div><div class="value red" id="occluded">NO</div></div>
+  <div class="metric"><div class="label">Pulses</div><div class="value" id="pulses">0</div></div>
+</div>
+<div class="controls">
+  <button id="btnFull" onclick="toggleFullOverlay()">🪟 Toggle Full Modal</button>
+  <button id="btnPartial" class="overlap-btn" onclick="togglePartialOverlap()">📐 Toggle Partial Overlap</button>
+  <button onclick="closeAll()">✕ Clear All</button>
+</div>
+<div class="banner-zone">
+  <div id="ad-slot"></div>
+</div>
+<p class="raw-label">Сырой сниппет image_display.smartTag</p>
+<pre id="rawSnippet"></pre>
+<div class="modal-overlay" id="fullOverlay">
+  <div class="modal-box"><h3>🪟 Full Modal Overlay</h3><p>This overlay completely covers the banner. SDK should detect 0% visibility.</p><button onclick="toggleFullOverlay()">Dismiss</button></div>
+</div>
+<div class="partial-overlap" id="partialOverlap">Partial<br>Overlap<br>~50% cover</div>
+
+<script>
+(function(){
+  VisiblaInject.showRaw('#rawSnippet', 'image_display', 'smartTag');
+  VisiblaInject.mountFormat('#ad-slot', 'image_display', 'smartTag');
+
+  var visPct=document.getElementById('visPct');
+  var mrc=document.getElementById('mrc'),occluded=document.getElementById('occluded');
+  var pulses=document.getElementById('pulses'),pCount=0;
+  var fullOverlay=document.getElementById('fullOverlay'),partialOverlap=document.getElementById('partialOverlap');
+  var btnFull=document.getElementById('btnFull'),btnPartial=document.getElementById('btnPartial');
+
+  function banner(){
+    return document.querySelector('#ad-slot .visibla-container') || document.getElementById('ad-slot');
+  }
+
+  window.toggleFullOverlay=function(){
+    var showing=fullOverlay.classList.toggle('show');
+    btnFull.classList.toggle('active',showing);updateOcclusion();
+  };
+  window.togglePartialOverlap=function(){
+    var showing=partialOverlap.classList.toggle('show');
+    btnPartial.classList.toggle('active',showing);updateOcclusion();
+  };
+  window.closeAll=function(){
+    fullOverlay.classList.remove('show');partialOverlap.classList.remove('show');
+    btnFull.classList.remove('active');btnPartial.classList.remove('active');updateOcclusion();
+  };
+
+  function updateOcclusion(){
+    var el=banner();
+    var fv=fullOverlay.classList.contains('show'),pv=partialOverlap.classList.contains('show');
+    var isOcc=fv||pv;occluded.textContent=isOcc?'YES':'NO';
+    occluded.className='value '+(isOcc?'yellow':'green');
+    if(fv){visPct.textContent='0%';visPct.className='value red';mrc.textContent='NO';mrc.className='value red';if(el)el.classList.remove('viewable');}
+    else if(pv){visPct.textContent='~50%';visPct.className='value yellow';mrc.textContent='PARTIAL';mrc.className='value yellow';}
+    else updateVisibility();
+  }
+
+  function updateVisibility(){
+    var el=banner(); if(!el) return;
+    var rect=el.getBoundingClientRect(),vw=window.innerWidth,vh=window.innerHeight;
+    var visW=Math.max(0,Math.min(rect.right,vw)-Math.max(rect.left,0));
+    var visH=Math.max(0,Math.min(rect.bottom,vh)-Math.max(rect.top,0));
+    var pct=rect.width*rect.height>0?Math.round((visW*visH/(rect.width*rect.height))*100):0;
+    visPct.textContent=pct+'%';visPct.className='value '+(pct>=50?'green':'red');
+    var ok=pct>=50;mrc.textContent=ok?'YES':'NO';mrc.className='value '+(ok?'green':'red');
+    el.classList.toggle('viewable',ok);if(ok)pCount++;pulses.textContent=pCount;
+  }
+
+  window.addEventListener('scroll',updateVisibility,{passive:true});
+  window.addEventListener('resize',updateVisibility,{passive:true});
+  updateVisibility();
+})();
+</script>
+</body>
+</html>

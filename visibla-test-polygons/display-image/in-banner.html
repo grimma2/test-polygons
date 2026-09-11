@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>In-Banner — Image Display</title>
+<script src="../tracking-codes.js"></script>
+<link rel="stylesheet" href="../shared/media.css">
+<link rel="stylesheet" href="../shared/hud.css">
+</head>
+<body class="media">
+<div class="hud">
+  <h2>In-Banner script</h2>
+  <div class="metric"><div class="label">Vis %</div><div class="value red" id="visPct">0%</div></div>
+  <a href="../index.html">На главную</a>
+</div>
+<p class="devtools-warn">Голый script vb.js рядом с уже существующим баннером.</p>
+<header class="site-header"><a class="brand" href="../index.html">Вести полигона</a></header>
+<div class="layout">
+  <article class="article">
+    <h1>In-Banner без обёртки кабинета</h1>
+    <div class="in-read">
+      <div class="visibla-container slot-box slot-300" id="banner">
+        <div id="ad-slot"></div>
+      </div>
+    </div>
+    <p class="raw-label">image_display.inBanner</p>
+    <pre id="rawSnippet"></pre>
+  </article>
+</div>
+<script src="../shared/hud.js"></script>
+<script>
+(function(){
+  VisiblaInject.showRaw('#rawSnippet', 'image_display', 'inBanner');
+  VisiblaInject.mountFormat('#ad-slot', 'image_display', 'inBanner');
+  VisiblaHud.watch('#banner');
+})();
+</script>
+</body>
+</html>

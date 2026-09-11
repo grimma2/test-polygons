@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<!-- SCAN_SDK -->
+<script>
+  (function(w, n, d) {
+    w[d] = w[d] || [];
+    w[n] = w[n] || function() {
+      Array.prototype.push.call(w[d], arguments);
+      if (w[d].length > 50) w[d].shift();
+    };
+  })(window, 'visibla', 'visiblaData');
+  visibla('init', '12413');
+</script>
+<script async src="https://storage.yandexcloud.net/visibla-scan/visibla.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scan SDK — активность</title>
+<link rel="stylesheet" href="../shared/media.css">
+<link rel="stylesheet" href="../shared/hud.css">
+</head>
+<body class="media">
+<div class="hud">
+  <h2>Scan SDK — скролл и track</h2>
+  <a href="../index.html">На главную</a>
+</div>
+<p class="devtools-warn">Не открывайте DevTools. Живая сессия: скролл и клики. Бот без них даст другой activity / idle / time_on_page.</p>
+<header class="site-header">
+  <a class="brand" href="../index.html">Вести полигона</a>
+  <nav>
+    <a href="article.html">MPA</a>
+    <a href="spa.html">SPA</a>
+  </nav>
+</header>
+<div class="layout">
+  <article class="article">
+    <p class="meta">Scan · activity · project 12413</p>
+    <h1>Длинная страница для скролла и кликов</h1>
+    <p class="lead">Прокрутите материал, кликайте блоки, затем отправьте явное событие и flush. Init уже вызван в head — второй раз не вызывайте.</p>
+    <div class="actions">
+      <button type="button" id="btnTrack">visibla('track')</button>
+      <button type="button" class="secondary" id="btnFlush">visibla('flush')</button>
+    </div>
+    <p class="hint" id="status">Кнопки track и flush после сниппета в head.</p>
+    <p>Первый экран. Дальше несколько экранов текста, чтобы набрать глубину скролла.</p>
+    <p>Сети считают активность по движению и кликам, а не только по загрузке пикселя.</p>
+    <p>Ещё абзац: без скролла бот останется у нулевой глубины.</p>
+    <p>Ещё абзац про idle: если не трогать страницу, сессия на бэке должна показать простой.</p>
+    <p>Клик по кнопке ниже — отдельный жест, не путать с track.</p>
+    <div class="actions">
+      <button type="button" class="secondary" id="btnClick">Клик по странице</button>
+    </div>
+    <p>Середина материала. Продолжайте вниз.</p>
+    <p>Ещё блок, чтобы time_on_page рос вместе со скроллом.</p>
+    <p>Ещё блок: пульсы Scan уходят сами, flush принудительно сбрасывает очередь.</p>
+    <p>Ещё блок про сравнение бота и человека на одном URL.</p>
+    <p>Ещё блок — почти низ страницы.</p>
+    <p>Низ статьи. Вернитесь вверх и снова прокрутите, если нужно больше activity.</p>
+  </article>
+</div>
+<footer class="site-footer">Scan SDK · visibla('track') · visibla('flush')</footer>
+<script>
+(function(){
+  var status = document.getElementById('status');
+  var n = 0;
+  document.getElementById('btnTrack').addEventListener('click', function(){
+    n++;
+    visibla('track', 'polygon_activity_' + n, {
+      type: 'click',
+      tag: 'activity',
+      value: n
+    });
+    status.textContent = 'track polygon_activity_' + n;
+  });
+  document.getElementById('btnFlush').addEventListener('click', function(){
+    visibla('flush');
+    status.textContent = 'flush';
+  });
+  document.getElementById('btnClick').addEventListener('click', function(){
+    status.textContent = 'клик по странице (не track)';
+  });
+})();
+</script>
+</body>
+</html>

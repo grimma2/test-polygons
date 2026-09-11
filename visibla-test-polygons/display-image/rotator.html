@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ротатор — Image Display</title>
+<script src="../tracking-codes.js"></script>
+<link rel="stylesheet" href="../shared/media.css">
+<link rel="stylesheet" href="../shared/hud.css">
+</head>
+<body class="media">
+<div class="hud">
+  <h2>Ротатор слота</h2>
+  <div class="metric"><div class="label">Remount</div><div class="value yellow" id="remounts">0</div></div>
+  <div class="metric"><div class="label">Vis %</div><div class="value red" id="visPct">0%</div></div>
+  <a href="../index.html">На главную</a>
+</div>
+<p class="devtools-warn">Remount того же Smart Tag. В ЛК — повторные показы одного креатива.</p>
+<header class="site-header"><a class="brand" href="../index.html">Вести полигона</a></header>
+<div class="layout">
+  <article class="article">
+    <h1>Reload слота как на площадке</h1>
+    <p class="hint">Таймер заново монтирует тот же <code>smartTag</code>. Это не разные креативы из ЛК.</p>
+    <div class="in-read"><div id="ad-slot" class="slot-box slot-300"></div></div>
+    <div class="actions">
+      <button type="button" id="btnRemount">Remount сейчас</button>
+      <button type="button" class="secondary" id="btnAuto">Авто каждые 8 с</button>
+    </div>
+    <p class="raw-label">image_display.smartTag</p>
+    <pre id="rawSnippet"></pre>
+  </article>
+</div>
+<script src="../shared/hud.js"></script>
+<script>
+(function(){
+  var n = 0;
+  var timer = null;
+  VisiblaInject.showRaw('#rawSnippet', 'image_display', 'smartTag');
+  function remount(){
+    n++;
+    document.getElementById('remounts').textContent = String(n);
+    VisiblaInject.mountFormat('#ad-slot', 'image_display', 'smartTag');
+  }
+  remount();
+  VisiblaHud.watch('#ad-slot');
+  document.getElementById('btnRemount').addEventListener('click', remount);
+  document.getElementById('btnAuto').addEventListener('click', function(){
+    if (timer) { clearInterval(timer); timer = null; return; }
+    timer = setInterval(remount, 8000);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAST — Kinescope</title>
+<script src="../tracking-codes.js"></script>
+<link rel="stylesheet" href="../shared/media.css">
+<link rel="stylesheet" href="../shared/hud.css">
+</head>
+<body class="media">
+<div class="hud">
+  <h2>VAST 3.0 — Kinescope</h2>
+  <div class="metric"><div class="label">XML</div><div class="value" id="fmtState">—</div></div>
+  <a href="../index.html">На главную</a>
+</div>
+<p class="devtools-warn">Не открывайте DevTools. Плеер стартует без звука. Хиты — в ЛК.</p>
+<header class="site-header">
+  <a class="brand" href="../index.html">Вести полигона</a>
+  <nav><a href="error.html">Ошибка MediaFile</a><a href="in-iframe.html">В iframe</a></nav>
+</header>
+<div class="layout">
+  <article class="article">
+    <p class="meta">Видео · преролл VAST</p>
+    <h1>Ролик с рекламой из XML кабинета</h1>
+    <p class="lead">В плеер уходит текст VAST после подстановки макросов Buzzoola. Поле Tag URL ниже сырое и в плеер не передаётся, пока пусто.</p>
+    <div id="ad-slot" class="video-frame"><div id="player"></div></div>
+    <p class="raw-label">Сырой VAST Tag URL</p>
+    <pre id="rawTag"></pre>
+    <p class="raw-label">Сырой VAST XML</p>
+    <pre id="rawXml"></pre>
+    <p class="raw-label">Событийные трекеры</p>
+    <pre id="rawTrackers"></pre>
+  </article>
+</div>
+<script src="../shared/kinescope.js"></script>
+<script>
+(function(){
+  VisiblaInject.showRaw('#rawTag', 'vast', 'tagUrl');
+  VisiblaInject.showRaw('#rawXml', 'vast', 'xml');
+  VisiblaInject.showRaw('#rawTrackers', 'vast', 'trackers');
+  var xml = VisiblaInject.vastXml('vast');
+  var state = document.getElementById('fmtState');
+  state.textContent = xml ? 'READY' : 'PENDING';
+  state.className = 'value ' + (xml ? 'green' : 'red');
+  if (!xml) {
+    VisiblaInject.showPending('#ad-slot', 'vast', 'xml');
+    return;
+  }
+  VisiblaKinescope.create('player', { xml: xml });
+})();
+</script>
+</body>
+</html>

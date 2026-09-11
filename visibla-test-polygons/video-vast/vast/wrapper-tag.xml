@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Вне контракта генератора: VAST Wrapper не входит в слоты tracking-codes.js.
+  Страницы полигона этот файл не загружают как ad tag.
+-->
+<VAST version="3.0">
+  <Ad id="unused-wrapper">
+    <Wrapper>
+      <AdSystem>Visibla</AdSystem>
+      <AdTitle>Unused wrapper stub</AdTitle>
+      <VASTAdTagURI><![CDATA[about:blank]]></VASTAdTagURI>
+    </Wrapper>
+  </Ad>
+</VAST>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Статья — Image Display</title>
+<script src="../tracking-codes.js"></script>
+<link rel="stylesheet" href="../shared/media.css">
+<link rel="stylesheet" href="../shared/hud.css">
+</head>
+<body class="media">
+<div class="hud">
+  <h2>Статья СМИ — Image Display</h2>
+  <div class="metric"><div class="label">In-read %</div><div class="value red" id="visPct">0%</div></div>
+  <div class="metric"><div class="label">MRC 1с</div><div class="value red" id="mrc">NO</div></div>
+  <a href="../index.html">На главную</a>
+</div>
+<p class="devtools-warn">Не открывайте DevTools. Клик только в блоке in-read.</p>
+<header class="site-header">
+  <a class="brand" href="../index.html">Вести полигона</a>
+  <nav><a href="../index.html">Главная</a><a href="sizes.html">Размеры</a></nav>
+</header>
+<div class="slot-header">
+  <div>
+    <div class="ad-label">Реклама 728×90</div>
+    <div class="slot-box slot-728 visibla-container" id="slot-header"></div>
+  </div>
+</div>
+<div class="layout">
+  <article class="article">
+    <p class="meta">10 сентября 2026 · Медиа</p>
+    <h1>Как площадки в РФ считают видимость баннера</h1>
+    <p class="lead">Типичная страница: шапка, текст, баннер в материале, сайдбар 240×400. Smart Tag из кабинета стоит в in-read — единственный кликабельный слот.</p>
+    <p>Верификаторы меряют геометрию слота внутри статьи, а не лабораторный квадрат на чёрном фоне. Скроллируйте до середины, чтобы in-read набрал 50% площади на секунду.</p>
+    <p>Боковые колонки вроде 240×400 остаются на виду дольше, чем горизонтальная шапка. Для SDK важен ненулевой размер контейнера <code>visibla-container</code>.</p>
+    <div class="in-read">
+      <div>
+        <div class="ad-label">Реклама 300×250 · клик</div>
+        <div id="ad-slot"></div>
+      </div>
+    </div>
+    <p>После слота материал продолжается: абзацы нужны, чтобы баннер уходил из viewport и возвращался. Повторный вход в зону видимости — отдельный сигнал для отчёта.</p>
+    <p>Макросы Buzzoola в коде кабинета на полигоне подставляются автоматически. Сырой сниппет ниже — как в ЛК, без подстановки.</p>
+    <p class="raw-label">image_display.smartTag</p>
+    <pre id="rawSnippet"></pre>
+    <p>Ещё текст, чтобы страница была длинной. Издатели редко ставят баннер сразу в первый экран без шапки и лида.</p>
+    <p>Если в ЛК нет хита после просмотра in-read — смотрите тег или SDK, не DevTools.</p>
+  </article>
+  <aside class="sidebar">
+    <div class="ad-label">Реклама 240×400</div>
+    <div class="slot-box slot-240 visibla-container" id="slot-side"></div>
+    <div class="widget"><h3>Читают сейчас</h3><p>Другие материалы полигона — на главной.</p></div>
+  </aside>
+</div>
+<footer class="site-footer"><a href="../index.html">Полигон Visibla</a></footer>
+<script src="../shared/hud.js"></script>
+<script>
+(function(){
+  VisiblaInject.showRaw('#rawSnippet', 'image_display', 'smartTag');
+  VisiblaInject.mountFormat('#ad-slot', 'image_display', 'smartTag');
+
+  function mountImgOnly(sel, tab, w, h) {
+    var host = document.querySelector(sel);
+    if (!host) return;
+    host.style.width = w + 'px';
+    host.style.height = h + 'px';
+    host.style.maxWidth = '100%';
+    if (!VisiblaInject.isReady('image_display', tab)) return;
+    var tpl = document.createElement('template');
+    tpl.innerHTML = VisiblaInject.forTest(VisiblaInject.get('image_display', tab));
+    var img = tpl.content.querySelector('img');
+    if (!img) return;
+    var clone = img.cloneNode(true);
+    clone.removeAttribute('id');
+    clone.style.width = '100%';
+    clone.style.height = '100%';
+    clone.style.objectFit = 'cover';
+    clone.style.display = 'block';
+    clone.style.border = '0';
+    host.innerHTML = '';
+    host.appendChild(clone);
+  }
+  mountImgOnly('#slot-header', 'smartTag_728x90', 728, 90);
+  mountImgOnly('#slot-side', 'smartTag_240x400', 240, 400);
+
+  VisiblaHud.watch('#ad-slot', { dwellMs: 1000 });
+})();
+</script>
+</body>
+</html>

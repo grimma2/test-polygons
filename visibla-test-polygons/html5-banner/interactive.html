@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML5 Interactive Banner — Visibla Test</title>
+<script src="../tracking-codes.js"></script>
+<link rel="stylesheet" href="../shared/hud.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0d1117;color:#c9d1d9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+.panel{position:sticky;top:0;z-index:1000;background:#161b22;border-bottom:2px solid #30363d;padding:14px 24px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.panel h2{color:#58a6ff;margin-right:auto;font-size:.95rem}
+.panel .metric{background:#21262d;border:1px solid #30363d;border-radius:8px;padding:7px 12px;min-width:80px}
+.panel .metric .label{font-size:.6rem;color:#8b949e;text-transform:uppercase}
+.panel .metric .value{font-size:1.1rem;font-weight:700;color:#58a6ff}
+.panel .metric .value.green{color:#3fb950}
+.panel .metric .value.red{color:#f85149}
+.spacer{height:800px;display:flex;align-items:center;justify-content:center;color:#30363d}
+.banner-zone{display:flex;justify-content:center;padding:30px 0}
+.visibla-container{position:relative;width:300px;height:250px;overflow:hidden;border:3px solid #f85149;border-radius:4px;transition:border-color .3s;background:#161b22}
+.visibla-container.viewable{border-color:#3fb950}
+.indicator{position:absolute;top:4px;right:4px;width:10px;height:10px;border-radius:50%;background:#f85149;transition:background .3s;z-index:10}
+.visibla-container.viewable .indicator{background:#3fb950}
+.banner-inner{padding:18px;height:100%;display:flex;flex-direction:column;justify-content:space-between}
+.banner-inner h3{color:#58a6ff;font-size:.9rem}
+.banner-inner .counter-row{display:flex;align-items:center;gap:10px}
+.banner-inner .cnt{font-size:1.8rem;font-weight:700;color:#3fb950;min-width:50px;text-align:center}
+.banner-inner button{padding:6px 14px;border:1px solid #30363d;border-radius:6px;background:#21262d;color:#c9d1d9;cursor:pointer;font-size:.75rem}
+.banner-inner button:hover{background:#30363d;border-color:#58a6ff}
+.banner-inner button.inc{background:#1b3a2a;border-color:#3fb950;color:#3fb950}
+.banner-inner button.dec{background:#3a1b1b;border-color:#f85149;color:#f85149}
+.banner-inner .hover-zone{padding:10px;border:1px dashed #30363d;border-radius:6px;text-align:center;font-size:.7rem;color:#8b949e;transition:all .2s;cursor:pointer}
+.banner-inner .hover-zone:hover,.hover-zone.hovered{border-color:#58a6ff;color:#58a6ff;background:rgba(88,166,255,.05)}
+.event-log{position:absolute;bottom:4px;left:4px;right:4px;font-size:.55rem;color:#3fb950;background:rgba(0,0,0,.7);padding:3px 6px;border-radius:3px;height:16px;overflow:hidden;z-index:5}
+.raw-label{text-align:center;color:#8b949e;font-size:.75rem;margin:8px 0 6px}
+</style>
+</head>
+<body>
+<div class="hud">
+  <h2>HTML5 Interactive</h2>
+  <a href="../index.html">На главную</a>
+  <div class="metric"><div class="label">Vis %</div><div class="value red" id="visPct">0%</div></div>
+  <div class="metric"><div class="label">MRC</div><div class="value red" id="mrc">NO</div></div>
+  <div class="metric"><div class="label">Count</div><div class="value" id="counterVal">0</div></div>
+  <div class="metric"><div class="label">Hovers</div><div class="value" id="hoverCount">0</div></div>
+  <div class="metric"><div class="label">Clicks</div><div class="value" id="clickCount">0</div></div>
+  <div class="metric"><div class="label">Pulses</div><div class="value" id="pulses">0</div></div>
+</div>
+<div class="spacer">▲ Scroll down ▼</div>
+<div class="banner-zone">
+  <meta name="ad.size" content="width=300,height=250">
+    <div class="visibla-container" id="banner">
+    <div class="indicator"></div>
+    <div class="banner-inner">
+      <h3>Interactive Counter</h3>
+      <div class="counter-row">
+        <button class="dec" onclick="decCounter(event)">−</button>
+        <span class="cnt" id="cnt">0</span>
+        <button class="inc" onclick="incCounter(event)">+</button>
+      </div>
+      <div class="hover-zone" id="hoverZone">🖱 Hover over me!</div>
+    </div>
+    <div class="event-log" id="eventLog">Ready...</div>
+    <div id="ad-slot"></div>
+  </div>
+</div>
+<p class="raw-label">Сырой сниппет html5_display.inBanner</p>
+<pre id="rawSnippet"></pre>
+<div class="spacer">▲ Banner above ▲</div>
+
+<script>
+(function(){
+  VisiblaInject.showRaw('#rawSnippet', 'html5_display', 'inBanner');
+  VisiblaInject.mountFormat('#ad-slot', 'html5_display', 'inBanner');
+
+  var cnt=0,hCount=0,cCount=0,pCount=0;
+  var banner=document.getElementById('banner'),cntEl=document.getElementById('cnt');
+  var counterVal=document.getElementById('counterVal'),eventLog=document.getElementById('eventLog');
+  var hoverCount=document.getElementById('hoverCount'),clickCount=document.getElementById('clickCount');
+  var hoverZone=document.getElementById('hoverZone');
+  var visPct=document.getElementById('visPct'),mrc=document.getElementById('mrc');
+  var pulses=document.getElementById('pulses');
+
+  function log(msg){eventLog.textContent=msg;}
+  window.incCounter=function(e){e.stopPropagation();cnt++;cntEl.textContent=cnt;counterVal.textContent=cnt;log('Increment: '+cnt);};
+  window.decCounter=function(e){e.stopPropagation();cnt--;cntEl.textContent=cnt;counterVal.textContent=cnt;log('Decrement: '+cnt);};
+  hoverZone.addEventListener('mouseenter',function(){hCount++;hoverCount.textContent=hCount;hoverZone.classList.add('hovered');log('Hover #'+hCount);});
+  hoverZone.addEventListener('mouseleave',function(){hoverZone.classList.remove('hovered');});
+  banner.addEventListener('click',function(e){if(e.target.closest('button'))return;cCount++;clickCount.textContent=cCount;log('Click #'+cCount);});
+
+  function update(){
+    var rect=banner.getBoundingClientRect(),vw=window.innerWidth,vh=window.innerHeight;
+    var visW=Math.max(0,Math.min(rect.right,vw)-Math.max(rect.left,0));
+    var visH=Math.max(0,Math.min(rect.bottom,vh)-Math.max(rect.top,0));
+    var pct=rect.width*rect.height>0?Math.round((visW*visH/(rect.width*rect.height))*100):0;
+    visPct.textContent=pct+'%';visPct.className='value '+(pct>=50?'green':'red');
+    var ok=pct>=50;mrc.textContent=ok?'YES':'NO';mrc.className='value '+(ok?'green':'red');
+    banner.classList.toggle('viewable',ok);if(ok)pCount++;pulses.textContent=pCount;
+  }
+  window.addEventListener('scroll',update,{passive:true});
+  window.addEventListener('resize',update,{passive:true});
+  update();
+})();
+</script>
+</body>
+</html>

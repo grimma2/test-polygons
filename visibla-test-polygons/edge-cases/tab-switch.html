@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tab Switch — Visibla Edge Case</title>
+<script src="../tracking-codes.js"></script>
+<link rel="stylesheet" href="../shared/hud.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0d1117;color:#c9d1d9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+.panel{position:sticky;top:0;z-index:1000;background:#161b22;border-bottom:2px solid #30363d;padding:14px 24px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.panel h2{color:#58a6ff;margin-right:auto;font-size:.95rem}
+.panel .metric{background:#21262d;border:1px solid #30363d;border-radius:8px;padding:7px 12px;min-width:85px}
+.panel .metric .label{font-size:.6rem;color:#8b949e;text-transform:uppercase}
+.panel .metric .value{font-size:1.1rem;font-weight:700;color:#58a6ff}
+.panel .metric .value.green{color:#3fb950}
+.panel .metric .value.red{color:#f85149}
+.panel .metric .value.yellow{color:#d2991d}
+.banner-zone{display:flex;justify-content:center;padding:20px 0}
+.visibla-container{position:relative;width:300px;height:250px;overflow:hidden;background:#fff;border:3px solid #f85149;border-radius:4px;transition:border-color .3s}
+.visibla-container.viewable{border-color:#3fb950}
+.visibla-container img{width:100%;height:100%;object-fit:cover}
+.status-big{text-align:center;padding:20px}
+.status-big .state-icon{font-size:4rem;display:block}
+.status-big .state-text{font-size:1.2rem;color:#8b949e;margin-top:8px}
+.event-list{max-width:500px;margin:0 auto;padding:12px;background:#161b22;border:1px solid #30363d;border-radius:8px;font-size:.75rem;font-family:monospace;max-height:200px;overflow-y:auto}
+.event-list .entry{padding:3px 0;border-bottom:1px solid #21262d}
+.event-list .entry.visible{color:#3fb950}
+.event-list .entry.hidden{color:#f85149}
+.info{text-align:center;max-width:500px;margin:12px auto;color:#8b949e;font-size:.78rem}
+.raw-label{text-align:center;color:#8b949e;font-size:.75rem;margin:8px 0 6px}
+</style>
+</head>
+<body>
+<div class="hud">
+  <h2>Tab Visibility Switch</h2>
+  <a href="../index.html">На главную</a>
+  <div class="metric"><div class="label">Tab State</div><div class="value green" id="tabState">VISIBLE</div></div>
+  <div class="metric"><div class="label">Switches</div><div class="value" id="switchCount">0</div></div>
+  <div class="metric"><div class="label">Banner Vis</div><div class="value green" id="bannerVis">100%</div></div>
+  <div class="metric"><div class="label">Hidden Time</div><div class="value" id="hiddenTime">0s</div></div>
+</div>
+<div class="status-big">
+  <span class="state-icon" id="stateIcon">👁️</span>
+  <span class="state-text" id="stateText">Tab is active &amp; visible</span>
+</div>
+<div class="banner-zone">
+  <div id="ad-slot"></div>
+</div>
+<p class="raw-label">Сырой сниппет image_display.smartTag</p>
+<pre id="rawSnippet"></pre>
+<div class="info">Switch browser tabs to test visibilitychange API handling. The SDK should pause tracking when tab is hidden.</div>
+<div class="event-list" id="eventList"><div class="entry visible">📄 Page loaded — tab visible</div></div>
+<script>
+(function(){
+  VisiblaInject.showRaw('#rawSnippet', 'image_display', 'smartTag');
+  VisiblaInject.mountFormat('#ad-slot', 'image_display', 'smartTag');
+
+  var switchCount=0,hiddenStart=null,totalHidden=0;
+  var tabState=document.getElementById('tabState'),switchEl=document.getElementById('switchCount');
+  var stateIcon=document.getElementById('stateIcon'),stateText=document.getElementById('stateText');
+  var hiddenTime=document.getElementById('hiddenTime'),eventList=document.getElementById('eventList');
+  var bannerVis=document.getElementById('bannerVis');
+
+  function banner(){
+    return document.querySelector('#ad-slot .visibla-container') || document.getElementById('ad-slot');
+  }
+
+  function addEntry(msg,cls){
+    var d=document.createElement('div');d.className='entry '+(cls||'visible');d.textContent=new Date().toLocaleTimeString()+' — '+msg;
+    eventList.insertBefore(d,eventList.firstChild);
+  }
+
+  document.addEventListener('visibilitychange',function(){
+    switchCount++;switchEl.textContent=switchCount;
+    var el=banner();
+    if(document.hidden){
+      hiddenStart=Date.now();
+      tabState.textContent='HIDDEN';tabState.className='value red';
+      stateIcon.textContent='🙈';stateText.textContent='Tab is hidden (switched away)';
+      bannerVis.textContent='0%';bannerVis.className='value red';
+      if(el) el.classList.remove('viewable');
+      addEntry('Tab HIDDEN','hidden');
+    }else{
+      if(hiddenStart){totalHidden+=Math.round((Date.now()-hiddenStart)/1000);hiddenStart=null;}
+      tabState.textContent='VISIBLE';tabState.className='value green';
+      stateIcon.textContent='👁️';stateText.textContent='Tab is active & visible';
+      bannerVis.textContent='100%';bannerVis.className='value green';
+      if(el) el.classList.add('viewable');
+      hiddenTime.textContent=totalHidden+'s';
+      addEntry('Tab VISIBLE again','visible');
+    }
+  });
+
+  setInterval(function(){
+    if(document.hidden&&hiddenStart){
+      hiddenTime.textContent=(totalHidden+Math.round((Date.now()-hiddenStart)/1000))+'s';
+    }
+  },1000);
+})();
+</script>
+</body>
+</html>

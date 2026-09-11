@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VPAID — Kinescope</title>
+<script src="../tracking-codes.js"></script>
+<link rel="stylesheet" href="../shared/media.css">
+<link rel="stylesheet" href="../shared/hud.css">
+</head>
+<body class="media">
+<div class="hud">
+  <h2>VPAID 2.0 — Kinescope</h2>
+  <div class="metric"><div class="label">XML</div><div class="value" id="fmtState">—</div></div>
+  <a href="../index.html">На главную</a>
+</div>
+<p class="devtools-warn">Не открывайте DevTools. Это другой XML, не VAST. Старт без звука.</p>
+<header class="site-header">
+  <a class="brand" href="../index.html">Вести полигона</a>
+  <nav><a href="mute-toggle.html">Mute / unmute</a></nav>
+</header>
+<div class="layout">
+  <article class="article">
+    <p class="meta">Видео · преролл VPAID</p>
+    <h1>Unit vb.js из XML кабинета</h1>
+    <p class="lead">В <code>playlist[].ad.adTag</code> уходит текст VPAID после <code>forTest</code>. Tag URL в плеер не передаётся, пока пуст. Если Kinescope не исполнит VPAID — см. backlog.</p>
+    <div id="ad-slot" class="video-frame"><div id="player"></div></div>
+    <p class="raw-label">Сырой VPAID Tag URL</p>
+    <pre id="rawTag"></pre>
+    <p class="raw-label">Сырой VPAID XML</p>
+    <pre id="rawXml"></pre>
+    <p class="raw-label">Событийные трекеры</p>
+    <pre id="rawTrackers"></pre>
+  </article>
+</div>
+<script src="../shared/kinescope.js"></script>
+<script>
+(function(){
+  VisiblaInject.showRaw('#rawTag', 'vpaid', 'tagUrl');
+  VisiblaInject.showRaw('#rawXml', 'vpaid', 'xml');
+  VisiblaInject.showRaw('#rawTrackers', 'vpaid', 'trackers');
+  var xml = VisiblaInject.vastXml('vpaid');
+  var state = document.getElementById('fmtState');
+  state.textContent = xml ? 'READY' : 'PENDING';
+  state.className = 'value ' + (xml ? 'green' : 'red');
+  if (!xml) {
+    VisiblaInject.showPending('#ad-slot', 'vpaid', 'xml');
+    return;
+  }
+  VisiblaKinescope.create('player', { xml: xml });
+})();
+</script>
+</body>
+</html>
