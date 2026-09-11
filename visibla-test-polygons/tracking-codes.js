@@ -133,10 +133,38 @@
     // inBanner: тот же script, что image_display.inBanner
     // pixels: те же два URL, что у pixel
     html5_display: {
-      status: 'pending',
-      iframe: '',
-      inBanner: '',
-      pixels: ''
+      status: 'ready',
+      iframe:
+        '<div class="visibla-container" style="position:relative;width:300px;height:250px;">\n' +
+        '  <iframe\n' +
+        '    src="https://storage.yandexcloud.net/tag-generator-media/html5/84/index.html?clickTag=[CLICK_URL]https%3A%2F%2Fexample.com&clickTAG=[CLICK_URL]https%3A%2F%2Fexample.com"\n' +
+        '    width="300"\n' +
+        '    height="250"\n' +
+        '    frameborder="0"\n' +
+        '    scrolling="no"\n' +
+        '    style="border:none;width:100%;height:100%;">\n' +
+        '  </iframe>\n' +
+        '  <script\n' +
+        '    data-project-id="12413"\n' +
+        '    data-campaign-id="11"\n' +
+        '    data-source-id="73"\n' +
+        '    data-creative-id="84"\n' +
+        '    async\n' +
+        '    src="https://storage.yandexcloud.net/visibla/vb.js">\n' +
+        '  </script>\n' +
+        '</div>',
+      inBanner:
+        '<script\n' +
+        '  data-project-id="12413"\n' +
+        '  data-campaign-id="11"\n' +
+        '  data-source-id="73"\n' +
+        '  data-creative-id="84"\n' +
+        '  async\n' +
+        '  src="https://storage.yandexcloud.net/visibla/vb.js">\n' +
+        '</script>',
+      pixels:
+        'Показ\thttps://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=84&source=73&event=impression&ts=[RANDOM]\n' +
+        'Клик\thttps://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=84&source=73&event=click&ts=[RANDOM]&redirect=[CLICK_URL]https%3A%2F%2Fexample.com'
     },
 
     // Формат 4. VAST 3.0
@@ -144,10 +172,71 @@
     // xml: VAST 3.0, ts=[CACHEBUSTER], track.gif?project=…
     // trackers: текстовый список событийных URL
     vast: {
-      status: 'pending',
-      tagUrl: '',
-      xml: '',
-      trackers: ''
+      status: 'ready',
+      tagUrl: 'https://storage.yandexcloud.net/tag-generator-media/vast/85.xml?ts=[RANDOM]',
+      xml:
+        '<?xml version="1.0" encoding="UTF-8"?>\n' +
+        '<VAST version="3.0">\n' +
+        '  <Ad id="11">\n' +
+        '    <InLine>\n' +
+        '      <AdSystem>Visibla</AdSystem>\n' +
+        '      <AdTitle><![CDATA[тест vast]]></AdTitle>\n' +
+        '      <Error><![CDATA[https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=85&source=106&event=error&error_code=[ERRORCODE]]]></Error>\n' +
+        '      <Impression id="visibla_imp"><![CDATA[https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=85&source=106&event=impression&ts=[CACHEBUSTER]]]></Impression>\n' +
+        '      <Creatives>\n' +
+        '        <Creative id="85">\n' +
+        '          <Linear>\n' +
+        '            <Duration>00:00:15</Duration>\n' +
+        '            <TrackingEvents>\n' +
+        '              <Tracking event="start"><![CDATA[https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=85&source=106&event=start&ts=[CACHEBUSTER]]]></Tracking>\n' +
+        '              <Tracking event="firstQuartile"><![CDATA[https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=85&source=106&event=firstQuartile&ts=[CACHEBUSTER]]]></Tracking>\n' +
+        '              <Tracking event="midpoint"><![CDATA[https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=85&source=106&event=midpoint&ts=[CACHEBUSTER]]]></Tracking>\n' +
+        '              <Tracking event="thirdQuartile"><![CDATA[https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=85&source=106&event=thirdQuartile&ts=[CACHEBUSTER]]]></Tracking>\n' +
+        '              <Tracking event="complete"><![CDATA[https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=85&source=106&event=complete&ts=[CACHEBUSTER]]]></Tracking>\n' +
+        '              <Tracking event="mute"><![CDATA[https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=85&source=106&event=mute]]></Tracking>\n' +
+        '              <Tracking event="unmute"><![CDATA[https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=85&source=106&event=unmute]]></Tracking>\n' +
+        '              <Tracking event="pause"><![CDATA[https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=85&source=106&event=pause]]></Tracking>\n' +
+        '              <Tracking event="resume"><![CDATA[https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=85&source=106&event=resume]]></Tracking>\n' +
+        '            </TrackingEvents>\n' +
+        '            <VideoClicks>\n' +
+        '              <ClickThrough id="visibla_click"><![CDATA[https://servicepipe.ru/blog]]></ClickThrough>\n' +
+        '              <ClickTracking id="visibla_click_track"><![CDATA[https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=85&source=106&event=click&ts=[CACHEBUSTER]]]></ClickTracking>\n' +
+        '            </VideoClicks>\n' +
+        '            <MediaFiles>\n' +
+        '              <MediaFile delivery="progressive" type="video/mp4" width="1920" height="1080" bitrate="2500" scalable="true" maintainAspectRatio="true">\n' +
+        '                <![CDATA[https://storage.yandexcloud.net/tag-generator-media/creatives/85.mp4]]>\n' +
+        '              </MediaFile>\n' +
+        '            </MediaFiles>\n' +
+        '          </Linear>\n' +
+        '        </Creative>\n' +
+        '      </Creatives>\n' +
+        '    </InLine>\n' +
+        '  </Ad>\n' +
+        '</VAST>',
+      trackers:
+        'impression\n' +
+        'https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=85&source=106&event=impression&ts=[CACHEBUSTER]\n' +
+        '\n' +
+        'start\n' +
+        'https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=85&source=106&event=start&ts=[CACHEBUSTER]\n' +
+        '\n' +
+        'firstQuartile\n' +
+        'https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=85&source=106&event=firstQuartile&ts=[CACHEBUSTER]\n' +
+        '\n' +
+        'midpoint\n' +
+        'https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=85&source=106&event=midpoint&ts=[CACHEBUSTER]\n' +
+        '\n' +
+        'thirdQuartile\n' +
+        'https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=85&source=106&event=thirdQuartile&ts=[CACHEBUSTER]\n' +
+        '\n' +
+        'complete\n' +
+        'https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=85&source=106&event=complete&ts=[CACHEBUSTER]\n' +
+        '\n' +
+        'click\n' +
+        'https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=85&source=106&event=click&ts=[CACHEBUSTER]\n' +
+        '\n' +
+        'error\n' +
+        'https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=85&source=106&event=error&error_code=[ERRORCODE]'
     },
 
     // Формат 5. VPAID 2.0
@@ -155,10 +244,52 @@
     // xml: MediaFile vb.js, затем mp4; AdParameters без endpoint/coreUrl
     // trackers: как у vast
     vpaid: {
-      status: 'pending',
-      tagUrl: '',
-      xml: '',
-      trackers: ''
+      status: 'ready',
+      tagUrl: 'https://storage.yandexcloud.net/tag-generator-media/vast/86.xml?ts=[RANDOM]',
+      xml:
+        '<?xml version="1.0" encoding="UTF-8"?>\n' +
+        '<VAST version="3.0">\n' +
+        '  <Ad id="11">\n' +
+        '    <InLine>\n' +
+        '      <AdSystem>Visibla</AdSystem>\n' +
+        '      <AdTitle><![CDATA[тест vpaid]]></AdTitle>\n' +
+        '      <Error><![CDATA[https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=86&source=106&event=error&error_code=[ERRORCODE]]]></Error>\n' +
+        '      <Impression id="visibla_vpaid_imp"><![CDATA[https://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=86&source=106&event=impression&ts=[CACHEBUSTER]]]></Impression>\n' +
+        '      <Creatives>\n' +
+        '        <Creative id="86">\n' +
+        '          <Linear>\n' +
+        '            <Duration>00:00:15</Duration>\n' +
+        '            <AdParameters><![CDATA[{\n' +
+        '  "project": "12413",\n' +
+        '  "campaign": "11",\n' +
+        '  "source": "106",\n' +
+        '  "creative": "86",\n' +
+        '  "videoUrl": "https://storage.yandexcloud.net/tag-generator-media/creatives/86.mp4",\n' +
+        '  "clickUrl": "https://servicepipe.ru/blog"\n' +
+        '}]]></AdParameters>\n' +
+        '            <MediaFiles>\n' +
+        '              <MediaFile apiFramework="VPAID" type="application/javascript" delivery="progressive" width="1920" height="1080">\n' +
+        '                <![CDATA[https://storage.yandexcloud.net/visibla/vb.js]]>\n' +
+        '              </MediaFile>\n' +
+        '              <MediaFile delivery="progressive" type="video/mp4" width="1920" height="1080" bitrate="2500" scalable="true" maintainAspectRatio="true">\n' +
+        '                <![CDATA[https://storage.yandexcloud.net/tag-generator-media/creatives/86.mp4]]>\n' +
+        '              </MediaFile>\n' +
+        '            </MediaFiles>\n' +
+        '          </Linear>\n' +
+        '        </Creative>\n' +
+        '      </Creatives>\n' +
+        '    </InLine>\n' +
+        '  </Ad>\n' +
+        '</VAST>',
+      trackers:
+        'impression\thttps://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=86&source=106&event=impression&ts=[CACHEBUSTER]\n' +
+        'start\thttps://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=86&source=106&event=start&ts=[CACHEBUSTER]\n' +
+        'firstQuartile\thttps://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=86&source=106&event=firstQuartile&ts=[CACHEBUSTER]\n' +
+        'midpoint\thttps://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=86&source=106&event=midpoint&ts=[CACHEBUSTER]\n' +
+        'thirdQuartile\thttps://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=86&source=106&event=thirdQuartile&ts=[CACHEBUSTER]\n' +
+        'complete\thttps://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=86&source=106&event=complete&ts=[CACHEBUSTER]\n' +
+        'click\thttps://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=86&source=106&event=click&ts=[CACHEBUSTER]\n' +
+        'error\thttps://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=86&source=106&event=error&error_code=[ERRORCODE]'
     },
 
     // Формат 6. Пиксель CTV — /pixel/smart/{project}/track.gif, без клика
