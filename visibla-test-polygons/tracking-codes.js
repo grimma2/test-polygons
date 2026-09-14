@@ -137,7 +137,7 @@
       iframe:
         '<div class="visibla-container" style="position:relative;width:300px;height:250px;">\n' +
         '  <iframe\n' +
-        '    src="https://storage.yandexcloud.net/tag-generator-media/html5/84/index.html?clickTag=[CLICK_URL]https%3A%2F%2Fexample.com&clickTAG=[CLICK_URL]https%3A%2F%2Fexample.com"\n' +
+        '    src="https://storage.yandexcloud.net/tag-generator-media/html5/87/index.html?clickTag=[CLICK_URL]https%3A%2F%2Fexample.com&clickTAG=[CLICK_URL]https%3A%2F%2Fexample.com"\n' +
         '    width="300"\n' +
         '    height="250"\n' +
         '    frameborder="0"\n' +
@@ -148,7 +148,7 @@
         '    data-project-id="12413"\n' +
         '    data-campaign-id="11"\n' +
         '    data-source-id="73"\n' +
-        '    data-creative-id="84"\n' +
+        '    data-creative-id="87"\n' +
         '    async\n' +
         '    src="https://storage.yandexcloud.net/visibla/vb.js">\n' +
         '  </script>\n' +
@@ -158,13 +158,13 @@
         '  data-project-id="12413"\n' +
         '  data-campaign-id="11"\n' +
         '  data-source-id="73"\n' +
-        '  data-creative-id="84"\n' +
+        '  data-creative-id="87"\n' +
         '  async\n' +
         '  src="https://storage.yandexcloud.net/visibla/vb.js">\n' +
         '</script>',
       pixels:
-        'Показ\thttps://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=84&source=73&event=impression&ts=[RANDOM]\n' +
-        'Клик\thttps://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=84&source=73&event=click&ts=[RANDOM]&redirect=[CLICK_URL]https%3A%2F%2Fexample.com'
+        'Показ\thttps://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=87&source=73&event=impression&ts=[RANDOM]\n' +
+        'Клик\thttps://antifraud.servicepipe.ru/pixel/verify/track.gif?project=12413&campaign=11&creative=87&source=73&event=click&ts=[RANDOM]&redirect=[CLICK_URL]https%3A%2F%2Fexample.com'
     },
 
     // Формат 4. VAST 3.0
